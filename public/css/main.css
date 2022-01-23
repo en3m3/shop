@@ -13,6 +13,11 @@ body {
 main {
   padding: 1rem;
   margin: auto;
+  max-width: 95%;
+}
+
+.centered {
+  text-align: center;
 }
 
 .main-header {
