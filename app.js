@@ -5,8 +5,10 @@ const PORT = process.env.PORT || 5000;
 
 const express = require('express');
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
 
 const errorController = require('./controllers/error');
+const User = require('./models/user');
 
 const app = express();
 
@@ -19,9 +21,41 @@ const shopRoutes = require('./routes/shop');
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use((req, res, next) => {
+    User.findById('5bab316ce0a7c75f783cb8a8')
+    .then(user => {
+        req.user = user;
+        next();
+    })
+    .catch(err => console.log(err));
+});
+ 
+
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
 
 app.use(errorController.get404);
+mongoose
+  .connect(
+    'mongodb+srv://siranrian:B53Trlj8wpOuhABV@cluster0.wrkh5.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
+  )
+  .then(result => {
+    User.findOne().then(user => {
+      if (!user) {
+        const user = new User({
+          name: 'Erik',
+          email: 'erik@test.com',
+          cart: {
+            items: []
+          }
+        });
+        user.save();
+      }
+    });
+    app.listen(PORT);
+  })
+  .catch(err => {
+    console.log(err);
+  });
 
-app.listen(PORT);
+
