@@ -1,4 +1,6 @@
-
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
 const PORT = process.env.PORT || 3000;
 
 const path = require('path');
@@ -14,8 +16,7 @@ const flash = require('connect-flash');
 
 const errorController = require('./controllers/error');
 const User = require('./models/user');
-const MONGODB_URI =
-  'mongodb+srv://siranrian:B53Trlj8wpOuhABV@cluster0.wrkh5.mongodb.net/shop';
+const MONGODB_URI = process.env.MONGODB_URI;
 
 
 const store = new MongoDBStore({
