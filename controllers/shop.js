@@ -116,6 +116,7 @@ exports.postOrder = (req, res, next) => {
                 },
                 products: products
             });
+            console.log(order);
             return order.save();
         })
         .then(result => {
